@@ -1,0 +1,20 @@
+{
+  "name": "ntulearn-harvester",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "NTULearn (Blackboard Learn Ultra) session-based course content harvester",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "login": "node src/login.mjs",
+    "status": "node src/status.mjs",
+    "discover": "node src/discover.mjs",
+    "harvest": "node src/harvest.mjs",
+    "verify": "node src/verify.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
