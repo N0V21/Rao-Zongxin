@@ -1,0 +1,19 @@
+.DS_Store
+Thumbs.db
+
+# Live session material — equivalent to being logged in. NEVER commit.
+harvester/.auth/
+.auth/
+
+# Harvested course data: your marks, attempts, and instructor materials.
+harvester/data/
+data/
+
+# Local browser + dependency caches
+.browsers/
+node_modules/
+.npm-cache/
+
+# Debug artifacts
+*.png
+*.log
