@@ -101,7 +101,7 @@ of the digest (also in `data/INDEX.md`) when you answer.
 The skill ships a wrapper that checks the session first and refreshes when it can:
 
 ```bash
-skills/ntulearn/scripts/refresh.sh
+bash skills/ntulearn/scripts/refresh.sh
 ```
 
 Or run the harvester directly (see `harvester/README.md`):
