@@ -44,21 +44,40 @@
 
 ## 安装
 
-仓库根目录就是 skill 本体（`SKILL.md` 在根），克隆到对应目录即可。
+本 skill 位于 [`Rao-Zongxin`](https://github.com/N0V21/Rao-Zongxin) 仓库的 `car-buying-advisor/` **子目录**下。
 
-### DeepSeek Harness / DSH
+⚠️ 注意：skill 的发现机制要求 `SKILL.md` 位于安装目录的**根**，且**不会递归扫描**嵌套的 `SKILL.md`。
+所以不能把整个仓库直接 clone 进 skills 目录——必须先把子目录取出来。下面两种方式任选其一。
+
+### 方式一：下载 ZIP（最简单，无需 git）
+
+在[仓库页面](https://github.com/N0V21/Rao-Zongxin)点 **Code → Download ZIP**，解压后把
+`Rao-Zongxin-main/car-buying-advisor` 整个文件夹复制到对应 skills 目录。
+
+### 方式二：命令行
+
+**DeepSeek Harness / DSH**
 
 ```bash
-git clone https://github.com/<your-username>/car-buying-advisor.git ~/.dsh/skills/car-buying-advisor
+git clone --depth 1 https://github.com/N0V21/Rao-Zongxin.git /tmp/rao-zongxin
+mkdir -p ~/.dsh/skills
+cp -R /tmp/rao-zongxin/car-buying-advisor ~/.dsh/skills/car-buying-advisor
+rm -rf /tmp/rao-zongxin
 ```
 
-### Claude Code
+**Claude Code**
 
 ```bash
-git clone https://github.com/<your-username>/car-buying-advisor.git ~/.claude/skills/car-buying-advisor
+git clone --depth 1 https://github.com/N0V21/Rao-Zongxin.git /tmp/rao-zongxin
+mkdir -p ~/.claude/skills
+cp -R /tmp/rao-zongxin/car-buying-advisor ~/.claude/skills/car-buying-advisor
+rm -rf /tmp/rao-zongxin
 ```
 
-Claude.ai 用户可将仓库目录打包成 ZIP 后上传（ZIP 内需包含一层同名目录）。
+装完请确认 `~/.dsh/skills/car-buying-advisor/SKILL.md` **就在这一层**（没有再嵌一层子目录），
+否则 skill 不会被加载。
+
+**Claude.ai**：把 `car-buying-advisor` 文件夹打包成 ZIP 上传（ZIP 内需包含一层同名目录）。
 
 ### 其他 agent（Codex / Cursor / Zed / Jules 等）
 
@@ -105,7 +124,8 @@ car-buying-advisor/
 ├── scripts/
 │   ├── validate_skill.py             # 规范校验
 │   └── test_validate_skill.py        # 校验器自身的测试（14 项）
-└── .github/workflows/validate.yml
+└── ci/
+    └── car-buying-advisor.yml        # 需复制到「仓库根」的 .github/workflows/
 ```
 
 ## 内置的领域知识
@@ -137,7 +157,9 @@ python3 scripts/test_validate_skill.py   # 校验器自身的测试（14 项）
 
 `test_validate_skill.py` 为每条规则准备了必须失败的样例和必须通过的样例——**一个只会通过的校验脚本没有意义**。
 
-CI 在每次 push 与 PR 时自动运行上述两项。
+> ⚠️ **关于 CI**：GitHub Actions **只识别仓库根目录**的 `.github/workflows/`，放在子目录里的工作流永远不会运行。
+> 本 skill 位于 monorepo 子目录下，因此 `ci/car-buying-advisor.yml` 需要**复制到仓库根**的 `.github/workflows/` 才会生效。
+> 该工作流已用 `paths` 过滤，只在 `car-buying-advisor/**` 变动时触发，不会影响同仓库中的其他项目。
 
 ## License
 

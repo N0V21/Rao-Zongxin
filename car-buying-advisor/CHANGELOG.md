@@ -29,6 +29,20 @@ Initial public release.
 - `scripts/validate_skill.py` plus a GitHub Actions workflow that checks
   spec compliance on every push.
 
+### Fixed
+
+- **CI could never have run.** The workflow was shipped at `car-buying-advisor/.github/workflows/validate.yml`,
+  but GitHub Actions only reads `.github/workflows/` at the **repository root** — a subdirectory workflow is
+  never discovered. Since this skill lives in a monorepo subdirectory, the workflow is now kept as a template at
+  `ci/car-buying-advisor.yml` and documented as needing a copy to the repo root's `.github/workflows/`. It is
+  path-filtered to `car-buying-advisor/**` so it cannot interfere with the other projects in the repository.
+- **Installation instructions were wrong for this repository's layout.** The skill lives in the
+  `car-buying-advisor/` subdirectory of the `Rao-Zongxin` repository, but the README told users to clone
+  `car-buying-advisor.git` as if it were a standalone repo. Even with the correct monorepo URL, cloning
+  straight into a skills directory places `SKILL.md` two levels deep, where skill discovery never looks.
+  Both READMEs now document the extract-the-subdirectory approach (ZIP download, or `git clone` + `cp -R`),
+  and the commands have been verified end to end.
+
 ### Design decisions worth recording
 
 - **Refuse to fabricate.** The skill forbids inventing phone numbers, prices,

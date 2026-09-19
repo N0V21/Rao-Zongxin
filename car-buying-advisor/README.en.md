@@ -55,22 +55,42 @@ And findings that change the entire search strategy:
 
 ## Installation
 
-The repository root *is* the skill bundle (`SKILL.md` lives at the root), so a clone into the right
-directory is the whole install.
+This skill lives in the `car-buying-advisor/` **subdirectory** of the
+[`Rao-Zongxin`](https://github.com/N0V21/Rao-Zongxin) repository.
 
-### DeepSeek Harness / DSH
+⚠️ Note: skill discovery requires `SKILL.md` to sit at the **root** of the install directory, and it does
+**not** recurse into nested `SKILL.md` files. Cloning the whole repository into your skills directory will
+therefore not work — extract the subdirectory first. Pick either method below.
+
+### Option 1: Download the ZIP (simplest, no git required)
+
+On the [repository page](https://github.com/N0V21/Rao-Zongxin), click **Code → Download ZIP**, unzip, then
+copy the `Rao-Zongxin-main/car-buying-advisor` folder into the relevant skills directory.
+
+### Option 2: Command line
+
+**DeepSeek Harness / DSH**
 
 ```bash
-git clone https://github.com/<your-username>/car-buying-advisor.git ~/.dsh/skills/car-buying-advisor
+git clone --depth 1 https://github.com/N0V21/Rao-Zongxin.git /tmp/rao-zongxin
+mkdir -p ~/.dsh/skills
+cp -R /tmp/rao-zongxin/car-buying-advisor ~/.dsh/skills/car-buying-advisor
+rm -rf /tmp/rao-zongxin
 ```
 
-### Claude Code
+**Claude Code**
 
 ```bash
-git clone https://github.com/<your-username>/car-buying-advisor.git ~/.claude/skills/car-buying-advisor
+git clone --depth 1 https://github.com/N0V21/Rao-Zongxin.git /tmp/rao-zongxin
+mkdir -p ~/.claude/skills
+cp -R /tmp/rao-zongxin/car-buying-advisor ~/.claude/skills/car-buying-advisor
+rm -rf /tmp/rao-zongxin
 ```
 
-Claude.ai users can zip the repository directory and upload it (the zip must contain a single top-level
+After copying, confirm that `~/.dsh/skills/car-buying-advisor/SKILL.md` sits **directly in that
+directory** (not one level deeper), otherwise the skill will not be discovered.
+
+**Claude.ai**: zip the `car-buying-advisor` folder and upload it (the zip must contain a single top-level
 directory with the same name as the skill).
 
 ### Other agents (Codex / Cursor / Zed / Jules …)
@@ -121,7 +141,8 @@ car-buying-advisor/
 ├── scripts/
 │   ├── validate_skill.py             # specification validator
 │   └── test_validate_skill.py        # tests for the validator (14 cases)
-└── .github/workflows/validate.yml
+└── ci/
+    └── car-buying-advisor.yml        # copy to the repo root's .github/workflows/
 ```
 
 ## Built-in domain knowledge
@@ -166,7 +187,10 @@ from the body actually exists. Standard library only, no third-party dependencie
 `test_validate_skill.py` pairs every rule with a fixture that **must fail** and one that **must pass** —
 a validator that only ever passes is worthless.
 
-CI runs both on every push and pull request.
+> ⚠️ **About CI**: GitHub Actions **only reads `.github/workflows/` at the repository root**; a workflow inside a
+> subdirectory never runs. Because this skill lives in a monorepo subdirectory, `ci/car-buying-advisor.yml` must be
+> **copied to the repo root's** `.github/workflows/` to take effect. The workflow is path-filtered so it only fires
+> on `car-buying-advisor/**` changes and does not affect the other projects in the same repository.
 
 ## License
 

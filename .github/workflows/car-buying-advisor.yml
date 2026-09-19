@@ -1,0 +1,38 @@
+# GitHub Actions 只识别「仓库根目录」的 .github/workflows/ —— 放在子目录里的工作流永远不会运行。
+# 因此本文件存放在 skill 子目录中，仅作为模板；使用前请复制到：
+#
+#     <repo-root>/.github/workflows/car-buying-advisor.yml
+#
+# 已用 paths 过滤，只在 car-buying-advisor/** 变动时触发，不影响同一仓库中的其他项目。
+
+name: car-buying-advisor
+
+on:
+  push:
+    paths:
+      - "car-buying-advisor/**"
+      - ".github/workflows/car-buying-advisor.yml"
+  pull_request:
+    paths:
+      - "car-buying-advisor/**"
+  workflow_dispatch:
+
+jobs:
+  skill-spec:
+    name: Validate SKILL.md
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: car-buying-advisor
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Test the validator itself
+        run: python3 scripts/test_validate_skill.py
+
+      - name: Check Agent Skills compliance
+        run: python3 scripts/validate_skill.py
