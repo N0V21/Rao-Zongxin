@@ -1,0 +1,9 @@
+# 运行时依赖
+python-dotenv>=1.0.0
+PyYAML>=6.0
+numpy>=1.26
+requests>=2.31
+sentence-transformers>=2.7
+
+# 开发/测试
+pytest>=8.0
